@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>손지우 | AI Github 어시스턴트 포트폴리오</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', 'Pretendard', sans-serif;
+            background-color: #000000; /* bg-black */
+        }
+        @import url('https://rsms.me/inter/inter.css');
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        .nav-link {
+            @apply block w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200;
+        }
+        .nav-link.active {
+            @apply bg-slate-700 text-lime-400 font-bold;
+        }
+        .nav-link:not(.active) {
+            @apply text-gray-400 hover:bg-slate-700 hover:text-gray-200;
+        }
+        
+        .tab-link {
+            @apply px-5 py-3 font-medium text-gray-400 border-b-2 border-transparent;
+        }
+        .tab-link.active {
+            @apply text-cyan-400 border-cyan-400;
+        }
+        .tab-content {
+            @apply hidden;
+        }
+        .tab-content.active {
+            @apply block;
+        }
+
+        .img-placeholder {
+            @apply w-full h-64 bg-slate-800 border border-slate-700 rounded-lg flex items-center justify-center text-gray-500;
+        }
+        .img-display {
+            @apply w-full h-64 bg-slate-800 border border-slate-700 rounded-lg flex items-center justify-center;
+        }
+
+        section.page-section {
+            scroll-margin-top: 40px;
+        }
+
+        .text-shadow-lg { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .text-shadow-md { text-shadow: 1px 1px 2px rgba(0,0,0,0.7); }
+
+        .skill-badge {
+            @apply inline-flex items-center gap-2 px-3 py-1 bg-slate-800 text-gray-200 rounded-full text-sm font-medium border border-slate-700 transition-colors hover:bg-slate-700;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-300 antialiased">
+
+    <div class="container mx-auto max-w-7xl">
+        <div class="md:grid md:grid-cols-12 md:gap-12 p-4 md:p-8">
+            
+            <nav class="md:col-span-3 md:sticky md:top-24 md:self-start bg-slate-900 rounded-lg shadow-lg p-4 space-y-2 mb-8 md:mb-0 border border-slate-700">
+                <a href="#project" class="nav-link active">🚀 Project: AI Github 어시스턴트</a>
+                <a href="#gallery" class="nav-link">🖼️ 관련 이미지</a>
+            </nav>
+
+            <main class="md:col-span-9 space-y-16">
+
+                <a href="https://github.com/jiwoo004" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="block bg-slate-900 p-4 rounded-lg shadow-lg border border-slate-700 transition-all duration-200 hover:bg-slate-800 hover:border-lime-400 hover:shadow-lime-500/10 -mt-8 md:mt-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-2xl ring-2 ring-slate-600">
+                            <span>🧑‍💻</span>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-lime-400">손지우</h2>
+                            <p class="text-sm text-gray-400">GitHub 프로필 방문하기 &rarr;</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <section id="project" class="page-section bg-slate-900 p-8 rounded-lg shadow-lg border border-slate-700">
+                    <h2 class="text-3xl font-semibold text-lime-400 mb-6">🚀 Project: AI Github 어시스턴트</h2>
+                    
+                    <div class="space-y-6 text-gray-300 leading-relaxed mb-8">
+                        <div>
+                            <h3 class="text-2xl font-semibold text-cyan-400 mb-3">🎯 [문제 정의]</h3>
+                            <p>Git과 GitHub는 현대 개발 협업에 필수적이지만, 많은 개발자에게 여전히 높은 장벽으로 존재합니다.</p>
+                            <ul class="list-disc list-inside space-y-1 pl-4 mt-2">
+                                <li><strong>초보자의 장벽:</strong> CLI 기반의 복잡한 명령어, 병합 충돌(Merge Conflict)의 공포, `reset`이나 `revert` 같은 되돌리기 작업의 위험성으로 인해 Git 사용을 어려워합니다.</li>
+                                <li><strong>개발자의 피로도:</strong> 숙련된 개발자조차 '커밋 메시지' 작성, 'Pull Request' 요약 등 반복적인 문서화 작업에 상당한 시간을 소모하고 있습니다.</li>
+                            </ul>
+                            <p class="mt-2">본 프로젝트는 이러한 문제들을 <strong>생성형 AI(Llama 3)</strong>를 통해 해결하여, Git의 진입 장벽을 낮추고 개발자 생산성을 혁신하는 것을 목표로 합니다.</p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-2xl font-semibold text-cyan-400 mb-3 mt-8">🏗️ [아키텍처/설계]</h3>
+                            <p>본 어시스턴트는 크로스 플랫폼(Windows, macOS, Linux) 데스크톱 애플리케이션으로 설계되었습니다.</p>
+                            <ul class="list-disc list-inside space-y-1 pl-4 mt-2">
+                                <li><strong>GUI (Frontend):</strong> `PySide 6 (Qt 6)` 프레임워크를 사용하여 네이티브 GUI를 구성했습니다. 모든 Git 및 AI 작업은 별도의 `QThread`에서 비동기 처리하여 GUI 멈춤(Freezing) 현상을 방지하고 사용자 경험을 보장했습니다.</li>
+                                <li><strong>Core Logic (Backend):</strong> `Python`을 메인 백엔드 언어로 채택했습니다. `subprocess` 모듈을 활용해 로컬에 설치된 `Git` 및 `GitHub CLI (gh)` 명령어를 직접 제어합니다.</li>
+                                <li><strong>AI Integration:</strong> `Llama 3` 모델을 핵심 AI 엔진으로 사용합니다. 사용자의 코드 변경 사항(`diff`), 커밋 로그 등을 분석하는 모든 AI 기능은 Python 백엔드에서 Llama 3 API를 호출하여 처리합니다.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-2xl font-semibold text-cyan-400 mb-4 mt-8">🛠️ [주요 기술 스택]</h3>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="skill-badge"><span class="w-2 h-2 bg-lime-400 rounded-full"></span>Python</span>
+                                <span class="skill-badge"><span class="w-2 h-2 bg-lime-400 rounded-full"></span>PySide 6</span>
+                                <span class="skill-badge"><span class="w-2 h-2 bg-lime-400 rounded-full"></span>Llama 3</span>
+                                <span class="skill-badge"><span class="w-2 h-2 bg-gray-400 rounded-full"></span>Git</span>
+                                <span class="skill-badge"><span class="w-2 h-2 bg-gray-400 rounded-full"></span>GitHub CLI</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-b border-slate-700 mb-6">
+                        <nav class="flex -mb-px flex-wrap" id="project-tabs">
+                            <button data-target="tab-features" class="tab-link active">💡 핵심 기능</button>
+                            <button data-target="tab-role" class="tab-link">👨‍💻 나의 역할 및 기여</button>
+                            <button data-target="tab-retro" class="tab-link">📈 성과 및 회고</button>
+                        </nav>
+                    </div>
+
+                    <div>
+                        <div id="tab-features" class="tab-content active space-y-6">
+                            <div>
+                                <h3 class="text-xl font-semibold text-lime-400">✨ [핵심 기능 1 - AI 커밋 메시지 자동 생성]</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
+                                    <li><strong>기능:</strong> 사용자가 Staging 영역에 파일을 올린 후 'AI 커밋' 버튼을 누르면, AI가 'Conventional Commit' 양식에 맞는 커밋 메시지를 자동으로 생성합니다.</li>
+                                    <li><strong>구현:</strong>
+                                        <ol class="list-decimal list-inside pl-4 mt-1">
+                                            <li>`git diff --staged` 명령어를 실행하여 코드 변경 이력(diff) 텍스트를 추출합니다.</li>
+                                            <li>추출된 diff 텍스트를 Llama 3 모델에게 "다음 diff를 분석하여 'Conventional Commit' 형식의 커밋 메시지 1줄을 작성해 줘"라는 프롬프트와 함께 전송합니다.</li>
+                                            <li>AI가 생성한 결과(예: `feat: 로그인 UI 및 로직 추가`)를 GUI의 커밋 메시지 입력창에 자동으로 채워 넣어, 사용자는 확인 후 즉시 커밋할 수 있습니다.</li>
+                                        </ol>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-lime-400">✨ [핵심 기능 2 - 선제적 AI 코드 리뷰 및 PR 자동 생성]</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
+                                    <li><strong>기능:</strong> 사용자가 Pull Request(PR)를 생성하기 전, 'AI 리뷰 받기' 버튼을 통해 코드의 잠재적 버그나 개선점을 피드백 받습니다. 이후 'AI PR 생성' 버튼으로 PR의 제목과 본문을 자동으로 완성합니다.</li>
+                                    <li><strong>구현:</strong>
+                                        <ol class="list-decimal list-inside pl-4 mt-1">
+                                            <li><strong>AI 코드 리뷰:</strong> `git diff [base]...[compare]`로 브랜치 간의 변경 사항을 추출합니다. Llama 3에 "시니어 개발자로서 다음 코드 변경 사항을 리뷰해 줘"라고 요청하여 잠재적 버그, 비효율적 로직, 스타일 문제를 찾아내고 개선 방안을 GUI 모달창에 표시합니다.</li>
+                                            <li><strong>AI PR 생성:</strong> 리뷰가 완료된 코드를 기반으로, AI가 전체 변경 사항을 요약하여 PR의 제목과 상세한 설명을 자동으로 작성합니다. 이는 `gh pr create` 명령어와 연동되어 즉시 GitHub에 PR을 제출할 수 있게 돕니다.</li>
+                                        </ol>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div id="tab-role" class="tab-content">
+                            <h3 class="text-xl font-semibold text-lime-400">👨‍💻 [나의 역할 및 기여]</h3>
+                            <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
+                                <li>프로젝트 아키텍처 설계 (Python, PySide 6, Llama 3 연동 구조)</li>
+                                <li>생성형 AI(Llama 3) 연동 모듈 개발 및 프롬프트 엔지니어링</li>
+                                <li>핵심 기능 (AI 커밋 메시지, AI 코드 리뷰) 백엔드 로직 구현</li>
+                                <li>Git 명령어 제어를 위한 `subprocess` 핸들러 및 `QThread`를 활용한 비동기 처리 구현</li>
+                                <li>PySide 6(Qt 6)를 이용한 메인 GUI 레이S아웃 및 핵심 기능 모달창 프로토타이핑</li>
+                            </ul>
+                        </div>
+                        
+                        <div id="tab-retro" class="tab-content space-y-6">
+                            <div>
+                                <h3 class="text-xl font-semibold text-lime-400">📊 [결과 및 성과]</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
+                                    <li><strong>문서화 자동화:</strong> `git diff`를 분석한 AI 커밋 메시지 자동 생성을 통해, 커밋 관련 문서화 시간을 획기적으로 단축하고 팀의 커밋 컨벤션 통일성 확보.</li>
+                                    <li><strong>코드 품질 향상:</strong> PR 제출 전 '선제적 AI 코드 리뷰' 기능을 도입하여, 동료 리뷰 이전에 잠재적 버그와 코드 스멜을 식별하고 수정함으로써 코드 품질을 상향 평준화.</li>
+                                    <li><strong>진입 장벽 완화:</strong> 'AI 병합 충돌 해결 지원', 'AI Undo 도우미' 등의 기능을 통해 초보 개발자가 Git의 복잡한 명령어와 위험한 상황에 대해 명확한 가이드를 받고 안전하게 작업을 수행할 수 있도록 지원.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-lime-400">💡 [회고 (배운 점)]</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
+                                    <li>생성형 AI(Llama 3)를 단순한 챗봇이 아닌, 실제 개발 워크플로우에 깊숙이 통합하는 과정(프롬프트 엔지니어링, diff 파싱)을 경험했습니다.</li>
+                                    <li>Python과 PySide 6를 사용해 반응형 데스크톱 GUI 애플리케이션을 개발하고, `QThread`를 통한 비동기 처리로 네이티브 앱 수준의 사용자 경험을 구현하는 방법을 배웠습니다.</li>
+                                    <li>Git의 `diff`, `log`, `reset` 등 내부 동작 원리를 AI와 연동하기 위해 깊이 있게 학습할 수 있었습니다.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-lime-400">🔄 [회고 (개선점)]</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
+                                    <li><strong>시각적 히스토리 도입:</strong> 현재 텍스트 기반인 로그를 넘어, Git 커밋/브랜치 그래프를 시각적으로 표현하고, 각 커밋을 클릭하면 'AI 로그 요약'을 보여주는 기능을 추가하고 싶습니다.</li>
+                                    <li><strong>Q&A 기능 고도화:</strong> Llama 3를 활용한 단순 Q&A 탭을 넘어, 현재 프로젝트의 코드베이스를 RAG(Retrieval-Augmented Generation) 방식으로 학습시켜, "내 프로젝트에서 '로그인' 관련 로직은 어디에 있지?"와 같은 컨텍스트 기반 질문에 답변할 수 있도록 고도화할 계획입니다.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="gallery" class="page-section bg-slate-900 p-8 rounded-lg shadow-lg border border-slate-700">
+                    <h2 class="text-3xl font-semibold text-fuchsia-400 mb-6">🖼️ 관련 이미지</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="img-placeholder">
+                            <span>프로젝트 메인 이미지 (GUI)</span>
+                        </div>
+                        <div class="img-display">
+                            <img src="https://i.ibb.co/hK7Jq6Z/AI-Github-Assistant-Architecture.png" alt="AI Github Assistant Architecture Diagram" class="max-h-full max-w-full object-contain p-2">
+                        </div>
+                        <div class="img-placeholder">
+                            <span>핵심 기능 1: AI 커밋</span>
+                        </div>
+                        <div class="img-placeholder">
+                            <span>핵심 기능 2: AI 코드 리뷰</span>
+                        </div>
+                        <div class="img-placeholder">
+                            <span>GitHub Stats</span>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.page-section');
+            
+            const projectTabs = document.querySelectorAll('#project-tabs .tab-link');
+            const projectTabContents = document.querySelectorAll('#project .tab-content');
+
+            function setupScrollNavigation() {
+                navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        const targetElement = document.querySelector(targetId);
+                        
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth' });
+                            window.history.pushState(null, null, targetId);
+                        }
+                    });
+                });
+            }
+
+            function setupScrollSpy() {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '-20% 0px -70% 0px',
+                    threshold: 0
+                };
+
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const id = entry.target.id;
+                            navLinks.forEach(link => {
+                                link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                            });
+                        }
+                    });
+                }, observerOptions);
+
+                sections.forEach(section => observer.observe(section));
+            }
+            
+            function setupProjectTabs() {
+                projectTabs.forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = tab.getAttribute('data-target');
+                        
+                        projectTabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        
+                        projectTabContents.forEach(content => {
+                            content.classList.add('hidden');
+                            content.classList.remove('active');
+                            if (content.id === targetId) {
+                                content.classList.remove('hidden');
+                                content.classList.add('active');
+                            }
+                        });
+                    });
+                });
+            }
+
+            setupScrollNavigation();
+            setupScrollSpy();
+            setupProjectTabs();
+
+            if (document.querySelector('#project')) {
+                document.querySelector('#project').scrollIntoView({ behavior: 'auto' });
+            }
+            if (!window.location.hash) {
+                navLinks[0].classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
