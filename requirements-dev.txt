@@ -1,0 +1,11 @@
+# Development dependencies for AI Git Assistant
+
+# Testing
+pytest>=7.0.0
+
+# Code quality (optional)
+flake8>=4.0.0
+black>=22.0.0
+
+# Type checking (optional)
+mypy>=0.950
