@@ -1,130 +1,115 @@
-````markdown
-# AI Git Assistant (MVP)
+# 🚀 AI Git Assistant (MVP)
 
-PySide6 GUI와 로컬 Ollama 모델을 사용하여 Git staged 변경사항의 diff를 분석해 커밋 메시지를 생성하고 안전하게 커밋을 실행하는 도구입니다.
+**PySide6 GUI**와 **로컬 Ollama 모델**을 활용하여 Git staged 변경사항을 분석하고, **AI가 커밋 메시지를 자동 생성**해주는 안전한 데스크톱 도구입니다.
 
-## 주요 기능
+복잡한 설정 파일 수정 없이, **앱 내 설정 메뉴**에서 직관적으로 모든 환경을 제어할 수 있습니다.
 
-- **프로젝트 열기**: Git 저장소를 선택해 스테이지된/언스테이지된 파일 목록 표시
-- **AI 커밋 메시지 생성**: 스테이지된 diff를 Ollama 로컬 모델에 보내 커밋 메시지 자동 생성
-- **안전한 커밋**: 크기 검사(safe_commit) 및 큰 변경사항에 대한 경고
-- **설정 조정**: UI에서 diff 경고 임계값과 AI 타임아웃 조정 가능 (설정은 `~/.ai-git-assistant/config.json`에 저장)
-- **작업 취소**: 긴 작업 중 UI에서 취소 버튼으로 중단 가능
+## 🌟 주요 기능
 
-## 요구사항
+- **📂 프로젝트 관리**: Git 저장소를 손쉽게 열고 스테이지/언스테이지 파일 상태를 한눈에 파악합니다.
+- **🧠 AI 커밋 메시지**: 로컬 LLM(Ollama)이 변경 사항(Diff)을 분석하여 문맥에 맞는 커밋 메시지를 제안합니다.
+- **⚙️ 간편한 UI 설정**: 타임아웃, Diff 크기 제한, 모델 선택 등 모든 옵션을 앱 내 **'설정(Settings)'** 메뉴에서 변경합니다.
+- **🛡️ 안전한 커밋 (Safe Commit)**:
+  - 대용량 변경 사항 감지 및 경고
+  - 실수 방지를 위한 크기 검사 로직 내장
+- **⚡ 작업 제어**: AI 분석이 길어질 경우 언제든 작업을 취소할 수 있는 비동기 처리 지원.
 
-- Python 3.9+
-- Git 설치
-- Ollama 설치 및 모델 준비 (기본: `exaone3.5:2.4b`)
+## 🛠️ 요구사항
 
-## 설치
+- **Python 3.9+**
+- **Git** (시스템 경로에 설치됨)
+- **Ollama** (로컬 AI 구동용)
 
+## 📥 설치 (Installation)
+
+⚠️ **주의**: 이 프로젝트는 기여와 관리를 위해 **반드시 Fork 후 설치**를 진행해 주세요. (ZIP 다운로드 금지)
+
+### 1. GitHub에서 프로젝트 Fork
+상단의 `Fork` 버튼을 눌러 본인의 계정으로 저장소를 가져옵니다.
+
+### 2. Fork된 저장소 클론
 ```bash
-# 1. 프로젝트 클론 또는 다운로드 후
+# 본인 계정의 저장소를 클론합니다
+git clone [https://github.com/YOUR_USERNAME/ai-git-assistant1.git](https://github.com/YOUR_USERNAME/ai-git-assistant1.git)
 cd ai-git-assistant1
-
-# 2. 가상환경 생성
-python3 -m venv .venv
-source .venv/bin/activate  # macOS/Linux
-# 또는
-.venv\Scripts\activate  # Windows
-
-# 3. 의존성 설치
-pip install -r requirements.txt
-
-# 4. (선택) 개발용 의존성 설치 (테스트 실행 시)
-pip install -r requirements-dev.txt
 ```
+### 3. 가상환경 생성 및 의존성 설치
+```bash
+# 가상환경 생성
+python3 -m venv .venv
 
-## 로컬 Ollama 설정
+# 가상환경 활성화
+source .venv/bin/activate   # macOS/Linux
+# .venv\Scripts\activate    # Windows
 
-이 프로젝트는 로컬 Ollama 데몬을 사용하도록 설계되었습니다.
+# 패키지 설치
+pip install -r requirements.txt
+```
+## 🦙 로컬 Ollama 설정 (필수)
+
+AI 기능을 사용하기 위해 로컬 환경에 Ollama가 실행 중이어야 합니다.
 
 ```bash
-# 1. Ollama 설치 (공식 사이트: https://ollama.ai)
+# 1. Ollama 설치 ([https://ollama.ai](https://ollama.ai))
 #    macOS: brew install ollama
-#    Linux: curl https://ollama.ai/install.sh | sh
-#    Windows: 설치 프로그램 다운로드
-
-# 2. 모델 풀다운
+#    Windows/Linux: 공식 사이트 참조
+```
+# 2. 모델 다운로드 (기본 권장 모델)
 ollama pull exaone3.5:2.4b
 
-# 3. Ollama 데몬 시작 (백그라운드)
+# 3. 백그라운드 서비스 실행
 ollama serve
-```
 
-## 실행
+## 🚀 실행 및 설정 가이드
 
+### 1. 앱 실행
 ```bash
-# 기본 모드 (로컬 Ollama 필요)
 python main.py
+```
+### 2. ⚙️ 앱 내 설정 (Settings)
+앱 실행 후 우측 상단의 **[설정]** 버튼을 누르면 다음 항목들을 조정할 수 있습니다. **복잡하게 파일을 직접 수정할 필요가 없습니다.**
 
-# Mock 모드 (개발/테스트용, Ollama 없이 동작)
+- **AI Model**: 사용할 Ollama 모델 이름 (기본값: `exaone3.5:2.4b`)
+- **Max Diff Size**: AI에게 보낼 최대 코드 변경량 (기본값: 2MB)
+- **Timeout**: AI 응답 대기 시간 (기본값: 30초)
+
+> **참고**: 설정한 내용은 `~/.ai-git-assistant/config.json` 경로에 자동으로 저장되어 다음 실행 시에도 유지됩니다.
+
+---
+
+## 👨‍💻 개발자용 옵션 (Advanced)
+
+일반 사용자는 이 단계가 필요하지 않으나, 개발 및 디버깅 목적으로 다음 환경 변수를 사용할 수 있습니다.
+
+**Mock 모드 (AI 없이 테스트)**
+Ollama가 설치되지 않은 환경에서 UI/UX를 테스트하려면 아래 명령어로 실행하세요.
+```bash
+# AI 호출을 가짜(Mock) 응답으로 대체
 AI_MOCK_MODE=1 python main.py
 ```
-
-## 환경 변수
-
-- **OLLAMA_MODEL**: 사용할 Ollama 모델 (기본: `exaone3.5:2.4b`)
-- **AI_MOCK_MODE**: 모의(mock) 모드 활성화 (값: `1`이면 활성화, Ollama 호출 없음)
-
-## 설정 파일
-
-사용자 설정은 `~/.ai-git-assistant/config.json`에 자동 저장됩니다.
-
-```json
-{
-  "max_diff_bytes": 2000000,
-  "ai_timeout_seconds": 30.0
-}
-```
-
-- **max_diff_bytes**: diff 크기 경고 임계값 (바이트, 기본: 2MB, 범위: 100KB ~ 100MB)
-- **ai_timeout_seconds**: Ollama 호출 타임아웃 (초, 기본: 30초, 범위: 5 ~ 300초)
-
-## 테스트
-
-```bash
-# 단위 테스트 실행 (git_utils)
-pytest -q
-
-# E2E 시뮬레이션 (전체 워크플로우, mock Ollama 사용)
-python scripts/e2e_simulate.py
-
-# 깃 유틸리티 진단
-python scripts/check_git_utils.py /path/to/repo
-```
-
-## 프로젝트 구조
-
+## 📂 프로젝트 구조
 ```
 .
 ├── backend/
-│   ├── config.py           # 설정 관리 (저장/불러오기)
-│   ├── git_utils.py        # Git 명령어 래퍼
-│   ├── ollama_client.py    # Ollama 호출 (timeout/retry/mock)
+│   ├── config.py         # 설정 입출력 관리
+│   ├── git_utils.py      # Git 명령어 및 Safe Commit 로직
+│   └── ollama_client.py  # Ollama API 통신
 ├── ui/
-│   └── main_window.py      # PySide6 메인 UI + 설정 다이얼로그
-├── tests/
-│   ├── conftest.py         # pytest 설정
-│   └── test_git_utils.py   # git_utils 단위 테스트
+│   └── main_window.py    # PySide6 메인 화면 및 설정 다이얼로그
 ├── scripts/
-│   ├── check_git_utils.py  # git_utils 진단 스크립트
-│   └── e2e_simulate.py     # E2E 시뮬레이션 (mock Ollama)
-├── main.py                 # 앱 진입점
-├── requirements.txt        # 런타임 의존성
-└── requirements-dev.txt    # 개발용 의존성
+│   └── e2e_simulate.py   # E2E 테스트 스크립트
+├── main.py               # 앱 진입점
+└── requirements.txt      # 필요 라이브러리 목록
 ```
 
-## 주요 개선 사항 (MVP 이후)
+## 🗓️ 향후 로드맵 (Roadmap)
 
-- [ ] 커밋 히스토리 표시 및 재시도
-- [ ] 커스텀 프롬프트 템플릿
-- [ ] 여러 모델 지원 (로컬 + 원격)
-- [ ] 커밋 전 diff 미리보기
-- [ ] 설정 UI 고급 옵션 확장
+- [ ] **커밋 히스토리 뷰어**: 이전 커밋 내역 확인 및 수정
+- [ ] **프롬프트 커스터마이징**: 사용자별 맞춤 AI 명령어 설정 기능
+- [ ] **Diff 미리보기**: 커밋 전 변경사항을 앱 내에서 시각적으로 확인
+- [ ] **다중 모델 지원**: 원격 API 및 다양한 로컬 모델 선택지 확장
 
-## 라이선스
+## 📄 라이선스
 
-MIT
-````
+MIT License
+
