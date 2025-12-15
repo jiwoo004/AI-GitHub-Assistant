@@ -19,7 +19,8 @@
                             green: '#00ff41',
                             cyan: '#00f3ff',
                             purple: '#bd00ff',
-                            gray: '#1f2937'
+                            gray: '#1f2937',
+                            red: '#ff003c'
                         }
                     },
                     fontFamily: {
@@ -29,6 +30,7 @@
                     boxShadow: {
                         'neon-green': '0 0 5px #00ff41, 0 0 20px rgba(0, 255, 65, 0.2)',
                         'neon-cyan': '0 0 5px #00f3ff, 0 0 20px rgba(0, 243, 255, 0.2)',
+                        'neon-red': '0 0 5px #ff003c, 0 0 20px rgba(255, 0, 60, 0.2)',
                     },
                     animation: {
                         'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -217,6 +219,7 @@
             font-weight: bold;
             border: 1px solid #00ff41;
             transition: all 0.2s;
+            cursor: pointer;
         }
         .cyber-btn-primary:hover {
             background: transparent;
@@ -229,6 +232,7 @@
             color: white;
             border: 1px solid #4b5563;
             transition: all 0.2s;
+            cursor: pointer;
         }
         .cyber-btn-secondary:hover {
             border-color: #00f3ff;
@@ -263,6 +267,40 @@
             background-image: radial-gradient(#1a1a1a 1px, transparent 1px);
             background-size: 20px 20px;
             z-index: 10; /* Ensure it's on top initially */
+        }
+
+        /* Modal Styles */
+        #feedback-modal {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #feedback-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .feedback-item {
+            background: rgba(0, 0, 0, 0.6);
+            border-left: 2px solid #1f2937;
+            padding: 12px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .feedback-item:hover {
+            background: rgba(0, 255, 65, 0.05);
+            border-left-color: #00ff41;
+            padding-left: 16px;
+        }
+        .feedback-user {
+            color: #00f3ff;
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 0.75rem;
+        }
+        /* Date hidden as requested, but style kept if needed later */
+        .feedback-date {
+            display: none; 
         }
     </style>
 </head>
@@ -333,11 +371,10 @@
                                class="cyber-btn-primary px-6 py-3 text-sm tracking-wider inline-flex items-center">
                                 GitHub Repository 방문하기 (Fork & Use) >>
                             </a>
-                            <a href="https://github.com/jiwoo004/AI-GitHub-Assistant/forks" 
-                               target="_blank" 
-                               class="cyber-btn-secondary px-6 py-3 text-sm tracking-wider inline-flex items-center">
-                                👥 현재 이용자 현황(Forks) 보러가기
-                            </a>
+                            <!-- Modified Button: User Feedback Modal Trigger -->
+                            <button id="btn-feedback" class="cyber-btn-secondary px-6 py-3 text-sm tracking-wider inline-flex items-center">
+                                💬 사용자 피드백 (USER_FEEDBACK) 조회
+                            </button>
                         </div>
                     </div>
 
@@ -562,6 +599,35 @@
         </div>
     </div>
 
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden">
+        <div class="relative w-full max-w-lg mx-4">
+            <!-- Modal Content -->
+            <div class="cyber-panel p-1 bg-gray-900/95 shadow-[0_0_30px_rgba(0,255,65,0.15)]">
+                <!-- Header -->
+                <div class="flex items-center justify-between bg-black/50 p-3 border-b border-gray-800">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-cyber-green animate-pulse"></div>
+                        <span class="text-cyber-green font-display text-sm tracking-wider">SYSTEM_MSG: FEEDBACK_LOGS</span>
+                    </div>
+                    <button id="btn-close-modal" class="text-gray-500 hover:text-cyber-red hover:text-glow transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                
+                <!-- Body -->
+                <div class="p-4 max-h-[60vh] overflow-y-auto font-mono text-sm space-y-2" id="feedback-list">
+                    <!-- Javascript will populate this -->
+                </div>
+                
+                <!-- Footer -->
+                <div class="p-3 border-t border-gray-800 text-center text-xs text-gray-500 font-mono">
+                    END OF LOG_STREAM // TOTAL: 10 RECORDS
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('.nav-link');
@@ -634,9 +700,8 @@
                 
                 if (videoContainer) {
                     videoContainer.addEventListener('click', function() {
-                        if (this.querySelector('iframe')) return; // 이미 재생 중이면 리턴
+                        if (this.querySelector('iframe')) return; 
                         
-                        // [수정] 임베드 허용 정책 강화 및 속성 최적화
                         this.innerHTML = `
                             <iframe 
                                 src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" 
@@ -651,10 +716,78 @@
                 }
             }
 
+            // --- Feedback Modal Logic ---
+            function setupFeedbackModal() {
+                const btnFeedback = document.getElementById('btn-feedback');
+                const modal = document.getElementById('feedback-modal');
+                const btnClose = document.getElementById('btn-close-modal');
+                const feedbackList = document.getElementById('feedback-list');
+
+                const feedbacks = [
+                    { user: "Kim*Sin", msg: "커밋 메시지 말투가 너무 딱딱해요. 이모지 같은 거 자동으로 넣어주면 좋을 것 같아요." },
+                    { user: "Kwon*Hyun", msg: "윈도우에서 가끔 멈춰요. 졸전 2주 남았는데 빨리 고쳐주세요 ㅠㅠ" },
+                    { user: "Kim*Woo", msg: "솔직히 디자인이 좀 별로에요. 너무 공대 감성이라 눈이 아파요." },
+                    { user: "Jeon*Young", msg: "충돌 났을 때 화면이 너무 복잡해요. 좀 더 쉽게 보여주세요." },
+                    { user: "Lee*Won", msg: "단축키 지원 좀 해주세요. 과제할 때 마우스 쓰기 귀찮아요." },
+                    { user: "Yoo*Hwan", msg: "이거 덕분에 캡스톤 문서화 빨리 끝냈어요. 압도적 감사..." },
+                    { user: "Lim*Hyung", msg: "코드 리뷰가 너무 빡세요... 교수님보다 더 무섭게 지적함. 살살 좀..." },
+                    { user: "Choi*Sung", msg: "맥북 쓰는데 가끔 발열이 심해져요. 최적화 부탁드려요." },
+                    { user: "Choi*Hyun", msg: "혹시 README 파일도 자동으로 써주는 기능 추가 안 되나요? 그게 제일 귀찮은데." },
+                    { user: "Shin*Kyung", msg: "리뷰 기능 덕분에 스파게티 코드 탈출했습니다. 리팩토링 제안 기능 짱짱맨." }
+                ];
+
+                // Render List
+                feedbackList.innerHTML = feedbacks.map((item, index) => `
+                    <div class="feedback-item group" style="animation: slideIn 0.3s ease-out forwards; animation-delay: ${index * 0.05}s; opacity: 0; transform: translateX(-10px);">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="feedback-user">User@${item.user}:~$</span>
+                            <!-- Date removed as requested -->
+                        </div>
+                        <div class="text-gray-300 pl-4 border-l border-gray-700 group-hover:border-cyber-green transition-colors">
+                            ${item.msg}
+                        </div>
+                    </div>
+                `).join('');
+
+                // Animation Keyframe
+                const styleSheet = document.createElement("style");
+                styleSheet.innerText = `
+                    @keyframes slideIn {
+                        to { opacity: 1; transform: translateX(0); }
+                    }
+                `;
+                document.head.appendChild(styleSheet);
+
+                // Events
+                btnFeedback.addEventListener('click', () => {
+                    modal.classList.remove('hidden');
+                    // Small delay to allow display:block to apply before opacity transition
+                    setTimeout(() => modal.classList.add('open'), 10);
+                });
+
+                const closeModal = () => {
+                    modal.classList.remove('open');
+                    setTimeout(() => modal.classList.add('hidden'), 300);
+                };
+
+                btnClose.addEventListener('click', closeModal);
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeModal();
+                });
+                
+                // ESC key close
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && modal.classList.contains('open')) {
+                        closeModal();
+                    }
+                });
+            }
+
             setupScrollNavigation();
             setupScrollSpy();
             setupProjectTabs();
             setupVideo();
+            setupFeedbackModal();
 
             if (document.querySelector('#project')) {
                 document.querySelector('#project').scrollIntoView({ behavior: 'auto' });
