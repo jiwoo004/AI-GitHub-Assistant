@@ -5,94 +5,278 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>손지우 | AI Github 어시스턴트 포트폴리오</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cyberpunk Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            black: '#050505',
+                            dark: '#0a0a0a',
+                            green: '#00ff41',
+                            cyan: '#00f3ff',
+                            purple: '#bd00ff',
+                            gray: '#1f2937'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        display: ['"Orbitron"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-green': '0 0 5px #00ff41, 0 0 20px rgba(0, 255, 65, 0.2)',
+                        'neon-cyan': '0 0 5px #00f3ff, 0 0 20px rgba(0, 243, 255, 0.2)',
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
         body {
-            font-family: 'Inter', 'Pretendard', sans-serif;
-            background-color: #000000; /* bg-black */
+            background-color: #020202;
+            color: #e5e7eb;
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
-        @import url('https://rsms.me/inter/inter.css');
-        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00ff41;
+            border: 1px solid #000;
+        }
+
+        /* CRT Scanline Effect */
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 50;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0, 255, 65, 0.02) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.1;
+            background-size: 100% 4px;
+            position: fixed;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100px; }
+        }
+
+        /* Cyber Panel Style */
+        .cyber-panel {
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid #1f2937;
+            position: relative;
+        }
+        .cyber-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            border-top: 2px solid #00ff41;
+            border-left: 2px solid #00ff41;
+        }
+        .cyber-panel::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 8px;
+            height: 8px;
+            border-bottom: 2px solid #00ff41;
+            border-right: 2px solid #00ff41;
+        }
+
+        /* Nav Link Styles */
         .nav-link {
-            @apply block w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200;
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+            opacity: 0.7;
+        }
+        .nav-link:hover {
+            background: rgba(0, 255, 65, 0.1);
+            color: #00ff41;
+            text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+            opacity: 1;
+            padding-left: 1.5rem; /* Slide effect */
         }
         .nav-link.active {
-            @apply bg-slate-700 text-lime-400 font-bold;
+            background: rgba(0, 255, 65, 0.05);
+            border-left: 4px solid #00ff41;
+            color: #00ff41;
+            font-weight: bold;
+            opacity: 1;
+            text-shadow: 0 0 5px #00ff41;
         }
-        .nav-link:not(.active) {
-            @apply text-gray-400 hover:bg-slate-700 hover:text-gray-200;
+
+        /* Tab Styles */
+        .tab-link {
+            border: 1px solid #1f2937;
+            background: #050505;
+            color: #6b7280;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 0.75rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
         }
         
-        /* [수정됨] 탭 버튼 스타일: 클릭감과 버튼 형태 강화 */
-        .tab-link {
-            @apply flex-1 md:flex-none text-center px-5 py-3 rounded-xl text-sm font-bold text-gray-400 bg-slate-800/40 border border-slate-700/50 transition-all duration-200;
-        }
-        /* Hover 효과: 살짝 떠오름 */
         .tab-link:hover {
-            @apply bg-slate-800 text-gray-200 border-slate-600 shadow-lg -translate-y-0.5;
+            border-color: #00ff41;
+            color: #00ff41;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.2) inset;
         }
-        /* Active(Click) 효과: 눌리는 느낌 */
-        .tab-link:active {
-            @apply scale-95 bg-slate-900;
-        }
-        /* 선택된 상태: 네온 글로우 효과 */
+
         .tab-link.active {
-            @apply bg-slate-800 text-cyan-400 border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.15)] ring-1 ring-cyan-500/20 translate-y-0;
+            background: #00ff41;
+            color: #000;
+            border-color: #00ff41;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
         }
 
         .tab-content {
-            @apply hidden;
+            display: none;
+            border-top: 1px solid #1f2937;
+            padding-top: 1.5rem;
         }
         .tab-content.active {
-            @apply block animate-[fadeIn_0.3s_ease-out];
+            display: block;
+            animation: flicker 0.5s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes flicker {
+            0% { opacity: 0; }
+            5% { opacity: 1; }
+            10% { opacity: 0; }
+            15% { opacity: 1; }
+            100% { opacity: 1; }
+        }
+
+        /* Skill Badges */
+        .skill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: #050505;
+            border: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .skill-badge:hover {
+            border-color: #00f3ff;
+            color: #00f3ff;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Utilities */
+        section.page-section {
+            scroll-margin-top: 40px;
+        }
+        
+        .text-glow {
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .cyber-btn-primary {
+            background: #00ff41;
+            color: black;
+            font-weight: bold;
+            border: 1px solid #00ff41;
+            transition: all 0.2s;
+        }
+        .cyber-btn-primary:hover {
+            background: transparent;
+            color: #00ff41;
+            box-shadow: 0 0 15px rgba(0,255,65,0.4);
+        }
+        
+        .cyber-btn-secondary {
+            background: transparent;
+            color: white;
+            border: 1px solid #4b5563;
+            transition: all 0.2s;
+        }
+        .cyber-btn-secondary:hover {
+            border-color: #00f3ff;
+            color: #00f3ff;
+            box-shadow: 0 0 15px rgba(0,243,255,0.4);
         }
 
         .video-container {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            padding-bottom: 56.25%; /* 16:9 */
             height: 0;
             overflow: hidden;
-            @apply bg-slate-800 rounded-lg border border-slate-700;
-        }
-        .video-container iframe,
-        .video-container .placeholder-text {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            background: #000;
+            border: 1px solid #333;
         }
         .placeholder-text {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
-            color: #9ca3af;
-        }
-
-        section.page-section {
-            scroll-margin-top: 40px;
-        }
-
-        .skill-badge {
-            @apply inline-flex items-center gap-2 px-3 py-1 bg-slate-800 text-gray-200 rounded-full text-sm font-medium border border-slate-700 transition-all hover:bg-slate-700 hover:text-white hover:border-lime-400 cursor-pointer;
+            color: #4b5563;
+            background-image: radial-gradient(#1a1a1a 1px, transparent 1px);
+            background-size: 20px 20px;
         }
     </style>
 </head>
-<body class="bg-black text-gray-300 antialiased">
+<body class="antialiased">
+    
+    <div class="scanline"></div>
 
-    <div class="container mx-auto max-w-7xl">
-        <div class="md:grid md:grid-cols-12 md:gap-12 p-4 md:p-8">
+    <div class="container mx-auto max-w-7xl relative z-10">
+        <div class="md:grid md:grid-cols-12 md:gap-8 p-4 md:p-8">
             
             <!-- Navigation -->
-            <nav class="md:col-span-3 md:sticky md:top-24 md:self-start bg-slate-900 rounded-lg shadow-lg p-4 space-y-2 mb-8 md:mb-0 border border-slate-700 z-10">
-                <a href="#project" class="nav-link active">🚀 Project: AI Github 어시스턴트</a>
-                <a href="#demo" class="nav-link">🎥 시연 영상</a>
+            <nav class="md:col-span-3 md:sticky md:top-24 md:self-start mb-8 md:mb-0">
+                <div class="cyber-panel p-4 space-y-1">
+                    <div class="text-xs text-gray-500 mb-2 font-display uppercase tracking-widest border-b border-gray-800 pb-1">Menu_System_v1.0</div>
+                    <a href="#project" class="nav-link active">🚀 Project: AI Github 어시스턴트</a>
+                    <a href="#demo" class="nav-link">🎥 시연 영상</a>
+                </div>
+                
+                <!-- Decorative Elements -->
+                <div class="mt-4 flex justify-between text-[10px] text-gray-600 font-mono">
+                    <span>SYS: ONLINE</span>
+                    <span class="animate-pulse text-cyber-green">● LINKED</span>
+                </div>
             </nav>
 
             <!-- Main Content -->
@@ -102,214 +286,234 @@
                 <a href="https://github.com/jiwoo004" 
                    target="_blank" 
                    rel="noopener noreferrer" 
-                   class="block bg-slate-900 p-4 rounded-lg shadow-lg border border-slate-700 transition-all duration-200 hover:bg-slate-800 hover:border-lime-400 hover:shadow-lime-500/10 -mt-8 md:mt-0">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-2xl ring-2 ring-slate-600">
+                   class="block cyber-panel p-6 transition-all duration-200 hover:border-cyber-green hover:shadow-neon-green group -mt-8 md:mt-0">
+                    <div class="flex items-center space-x-6">
+                        <div class="relative w-16 h-16 bg-gray-900 border border-gray-700 flex items-center justify-center text-3xl group-hover:border-cyber-green group-hover:text-cyber-green transition-colors">
                             <span>🧑‍💻</span>
+                            <!-- Glitch overlay -->
+                            <div class="absolute inset-0 border border-cyber-green opacity-0 group-hover:opacity-100 group-hover:animate-ping"></div>
                         </div>
                         <div>
-                            <h2 class="text-xl font-bold text-lime-400">손지우</h2>
-                            <p class="text-sm text-gray-400">GitHub 프로필 방문하기 &rarr;</p>
+                            <div class="text-xs text-cyber-cyan mb-1 tracking-widest">USER_ID:</div>
+                            <h2 class="text-2xl font-bold text-white font-display tracking-wide group-hover:text-cyber-green transition-colors">손지우</h2>
+                            <p class="text-sm text-gray-400 mt-1 font-mono">>> GitHub 프로필 방문하기_</p>
                         </div>
                     </div>
                 </a>
                 
                 <!-- Project Section -->
-                <section id="project" class="page-section bg-slate-900 p-8 rounded-lg shadow-lg border border-slate-700">
-                    <h2 class="text-3xl font-semibold text-lime-400 mb-6">🚀 Project: AI Github 어시스턴트</h2>
+                <section id="project" class="page-section cyber-panel p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="w-2 h-8 bg-cyber-green block"></span>
+                        <h2 class="text-3xl font-bold font-display text-white tracking-wider">PROJECT: <span class="text-cyber-green text-glow">AI Github 어시스턴트</span></h2>
+                    </div>
                     
                     <!-- Repository Link (Highlighted) -->
-                    <div class="bg-slate-800/50 border border-lime-500/30 rounded-lg p-6 mb-8 hover:border-lime-400 transition-colors">
-                        <h3 class="text-lg font-bold text-lime-400 mb-2">📦 배포 및 사용 가이드</h3>
-                        <p class="text-gray-300 mb-4">
-                            이 프로젝트는 오픈소스로 공개되어 있습니다. 아래 링크에서 리포지토리를 Fork하여 직접 사용해보세요.
+                    <div class="border border-cyber-green/30 bg-cyber-green/5 p-6 mb-8 hover:border-cyber-green transition-all relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-2 opacity-20 group-hover:opacity-50 transition-opacity">
+                            <svg class="w-12 h-12 text-cyber-green" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-cyber-green mb-2 font-display uppercase">[ 배포 및 사용 가이드 ]</h3>
+                        <p class="text-gray-400 mb-6 text-sm font-mono leading-relaxed">
+                            이 프로젝트는 오픈소스로 공개되어 있습니다. 아래 링크에서 리포지토리를 Fork하여 직접 사용해보세요.<br>
                             설치 및 실행 방법은 README에 자세히 기술되어 있습니다.
                         </p>
-                        <a href="https://github.com/jiwoo004/AI-GitHub-Assistant" 
-                           target="_blank" 
-                           class="inline-flex items-center justify-center px-6 py-3 bg-lime-600 hover:bg-lime-500 text-black font-bold rounded-lg transition-colors">
-                            GitHub Repository 방문하기 (Fork & Use) &rarr;
-                        </a>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="https://github.com/jiwoo004/AI-GitHub-Assistant" 
+                               target="_blank" 
+                               class="cyber-btn-primary px-6 py-3 text-sm tracking-wider inline-flex items-center">
+                                GitHub Repository 방문하기 (Fork & Use) >>
+                            </a>
+                            <a href="https://github.com/jiwoo004/AI-GitHub-Assistant/forks" 
+                               target="_blank" 
+                               class="cyber-btn-secondary px-6 py-3 text-sm tracking-wider inline-flex items-center">
+                                👥 현재 이용자 현황(Forks) 보러가기
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="space-y-6 text-gray-300 leading-relaxed mb-8">
+                    <div class="space-y-8 text-gray-300 leading-relaxed mb-10">
                         <div>
-                            <h3 class="text-2xl font-semibold text-cyan-400 mb-3">🎯 [문제 정의]</h3>
-                            <p>Git과 GitHub는 현대 개발 협업에 필수적이지만, 많은 개발자에게 여전히 높은 장벽으로 존재합니다.</p>
-                            <ul class="list-disc list-inside space-y-1 pl-4 mt-2">
-                                <li><strong>초보자의 장벽:</strong> CLI 기반의 복잡한 명령어, 병합 충돌(Merge Conflict)의 공포, `reset`이나 `revert` 같은 되돌리기 작업의 위험성으로 인해 Git 사용을 어려워합니다.</li>
-                                <li><strong>개발자의 피로도:</strong> 숙련된 개발자조차 '커밋 메시지' 작성, 'Pull Request' 요약 등 반복적인 문서화 작업에 상당한 시간을 소모하고 있습니다.</li>
+                            <h3 class="text-xl font-bold text-cyber-cyan mb-3 font-display border-b border-gray-800 pb-2 inline-block">TARGET: [문제 정의]</h3>
+                            <p class="text-sm md:text-base">Git과 GitHub는 현대 개발 협업에 필수적이지만, 많은 개발자에게 여전히 높은 장벽으로 존재합니다.</p>
+                            <ul class="list-none space-y-2 mt-3 pl-2 border-l-2 border-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">>></span>
+                                    <span><strong>초보자의 장벽:</strong> CLI 기반의 복잡한 명령어, 병합 충돌(Merge Conflict)의 공포, 되돌리기 작업의 위험성.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">>></span>
+                                    <span><strong>개발자의 피로도:</strong> '커밋 메시지' 작성, 'Pull Request' 요약 등 반복적인 문서화 작업에 시간 소모.</span>
+                                </li>
                             </ul>
-                            <p class="mt-2">본 프로젝트는 이러한 문제들을 <strong>생성형 AI(Llama 3)</strong>를 통해 해결하여, Git의 진입 장벽을 낮추고 개발자 생산성을 혁신하는 것을 목표로 합니다.</p>
+                            <p class="mt-4 text-sm text-cyber-green">SOLUTION: 생성형 AI(Llama 3)를 통해 Git 진입 장벽을 낮추고 생산성 혁신.</p>
                         </div>
                         
                         <div>
-                            <h3 class="text-2xl font-semibold text-cyan-400 mb-3 mt-8">🏗️ [아키텍처/설계]</h3>
-                            <p>본 어시스턴트는 크로스 플랫폼(Windows, macOS, Linux) 데스크톱 애플리케이션으로 설계되었습니다.</p>
-                            <ul class="list-disc list-inside space-y-1 pl-4 mt-2">
-                                <li><strong>GUI (Frontend):</strong> `PySide 6 (Qt 6)` 프레임워크를 사용하여 네이티브 GUI를 구성했습니다. 모든 Git 및 AI 작업은 별도의 `QThread`에서 비동기 처리하여 GUI 멈춤(Freezing) 현상을 방지하고 사용자 경험을 보장했습니다.</li>
-                                <li><strong>Core Logic (Backend):</strong> `Python`을 메인 백엔드 언어로 채택했습니다. `subprocess` 모듈을 활용해 로컬에 설치된 `Git` 및 `GitHub CLI (gh)` 명령어를 직접 제어합니다.</li>
-                                <li><strong>AI Integration:</strong> `Llama 3` 모델을 핵심 AI 엔진으로 사용합니다. 사용자의 코드 변경 사항(`diff`), 커밋 로그 등을 분석하는 모든 AI 기능은 Python 백엔드에서 Llama 3 API를 호출하여 처리합니다.</li>
+                            <h3 class="text-xl font-bold text-cyber-cyan mb-3 font-display border-b border-gray-800 pb-2 inline-block">SYSTEM: [아키텍처/설계]</h3>
+                            <p class="text-sm md:text-base">크로스 플랫폼(Windows, macOS, Linux) 데스크톱 애플리케이션으로 설계되었습니다.</p>
+                            <ul class="list-none space-y-2 mt-3 pl-2 border-l-2 border-cyber-cyan/50">
+                                <li><span class="text-cyber-cyan font-bold">[GUI]</span> PySide 6 (Qt 6) 프레임워크. QThread 비동기 처리로 GUI 멈춤 방지.</li>
+                                <li><span class="text-cyber-cyan font-bold">[Core Logic]</span> Python 백엔드. subprocess 모듈로 Git 및 GitHub CLI(gh) 제어.</li>
+                                <li><span class="text-cyber-cyan font-bold">[AI Integration]</span> Llama 3 모델을 핵심 AI 엔진으로 사용하여 diff 분석 및 텍스트 생성.</li>
                             </ul>
                         </div>
 
                         <div>
-                            <h3 class="text-2xl font-semibold text-cyan-400 mb-4 mt-8">🛠️ [주요 기술 스택]</h3>
-                            <p class="text-sm text-gray-500 mb-2">* 배지를 클릭하면 공식 홈페이지로 이동합니다.</p>
+                            <h3 class="text-xl font-bold text-cyber-cyan mb-4 font-display border-b border-gray-800 pb-2 inline-block">TECH_STACK: [주요 기술 스택]</h3>
                             <div class="flex flex-wrap gap-3">
-                                <a href="https://www.python.org/" target="_blank" class="skill-badge">
-                                    <span class="w-2 h-2 bg-lime-400 rounded-full"></span>Python
+                                <a href="https://www.python.org/" target="_blank" class="skill-badge hover:text-yellow-400 hover:border-yellow-400">
+                                    Python
                                 </a>
-                                <a href="https://doc.qt.io/qtforpython/" target="_blank" class="skill-badge">
-                                    <span class="w-2 h-2 bg-lime-400 rounded-full"></span>PySide 6
+                                <a href="https://doc.qt.io/qtforpython/" target="_blank" class="skill-badge hover:text-green-400 hover:border-green-400">
+                                    PySide 6
                                 </a>
-                                <a href="https://ai.meta.com/llama/" target="_blank" class="skill-badge">
-                                    <span class="w-2 h-2 bg-lime-400 rounded-full"></span>Llama 3
+                                <a href="https://ai.meta.com/llama/" target="_blank" class="skill-badge hover:text-blue-400 hover:border-blue-400">
+                                    Llama 3
                                 </a>
-                                <a href="https://git-scm.com/" target="_blank" class="skill-badge">
-                                    <span class="w-2 h-2 bg-gray-400 rounded-full"></span>Git
+                                <a href="https://git-scm.com/" target="_blank" class="skill-badge hover:text-orange-500 hover:border-orange-500">
+                                    Git
                                 </a>
-                                <a href="https://cli.github.com/" target="_blank" class="skill-badge">
-                                    <span class="w-2 h-2 bg-gray-400 rounded-full"></span>GitHub CLI
+                                <a href="https://cli.github.com/" target="_blank" class="skill-badge hover:text-purple-400 hover:border-purple-400">
+                                    GitHub CLI
                                 </a>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Result Summary Report (Top Highlight) -->
-                    <div class="bg-slate-800 rounded-lg p-6 mb-8 border-l-4 border-cyan-400">
-                        <h3 class="text-xl font-bold text-white mb-2">📊 종합 결과 요약</h3>
-                        <p class="text-gray-300">
-                            단순한 챗봇 연동을 넘어 로컬 Git 환경과 LLM을 유기적으로 결합함으로써, <strong>문서화 시간 60% 단축</strong>과 <strong>초기 코드 리뷰 자동화</strong>를 실현했습니다. 개발자가 코딩 본연의 업무에 집중할 수 있는 효율적인 환경을 구축했습니다.
+                    <!-- Result Summary Report -->
+                    <div class="bg-gray-900 border border-cyber-cyan/50 p-6 mb-8 relative">
+                        <div class="absolute -top-3 -left-1 bg-cyber-cyan text-black px-2 py-0.5 text-xs font-bold font-display">종합 결과 요약</div>
+                        <p class="text-gray-300 mt-2 text-sm md:text-base">
+                            단순한 챗봇 연동을 넘어 로컬 Git 환경과 LLM을 유기적으로 결합했습니다.<br>
+                            <strong class="text-cyber-green">>> 문서화 시간 60% 단축</strong><br>
+                            <strong class="text-cyber-green">>> 초기 코드 리뷰 자동화 실현</strong>
                         </p>
                     </div>
 
-                    <!-- [수정됨] 구분선 추가: 결과 요약과 탭 메뉴 사이 경계 -->
-                    <div class="relative py-4 mb-8">
+                    <!-- Divider -->
+                    <div class="relative py-6 mb-4">
                         <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                            <div class="w-full border-t border-slate-700 border-dashed"></div>
+                            <div class="w-full border-t border-gray-800 border-dashed"></div>
+                        </div>
+                        <div class="relative flex justify-center">
+                            <span class="px-2 bg-black text-xs text-gray-500 font-mono">// DETAILED_DATA_STREAMS</span>
                         </div>
                     </div>
 
-                    <!-- [수정됨] 탭 메뉴 컨테이너: 간격(gap) 추가 및 mb-6 유지 -->
+                    <!-- Tabs -->
                     <div class="mb-8">
-                        <nav class="flex flex-wrap gap-2 md:gap-3" id="project-tabs">
-                            <button data-target="tab-features" class="tab-link active">💡 핵심 기능</button>
-                            <button data-target="tab-role" class="tab-link">👨‍💻 나의 역할 및 기여</button>
-                            <button data-target="tab-results" class="tab-link">📊 상세 성과</button>
-                            <button data-target="tab-retro" class="tab-link">📝 회고</button>
+                        <nav class="flex flex-wrap gap-2 md:gap-4" id="project-tabs">
+                            <button data-target="tab-features" class="tab-link active">01_핵심기능</button>
+                            <button data-target="tab-role" class="tab-link">02_나의역할</button>
+                            <button data-target="tab-results" class="tab-link">03_상세성과</button>
+                            <button data-target="tab-retro" class="tab-link">04_회고</button>
                         </nav>
                     </div>
 
-                    <div>
-                        <div id="tab-features" class="tab-content active space-y-6">
-                            <div>
-                                <h3 class="text-xl font-semibold text-lime-400">✨ [핵심 기능 1 - AI 커밋 메시지 자동 생성]</h3>
-                                <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
-                                    <li><strong>기능:</strong> 사용자가 Staging 영역에 파일을 올린 후 'AI 커밋' 버튼을 누르면, AI가 'Conventional Commit' 양식에 맞는 커밋 메시지를 자동으로 생성합니다.</li>
-                                    <li><strong>구현:</strong>
-                                        <ol class="list-decimal list-inside pl-4 mt-1">
-                                            <li>`git diff --staged` 명령어를 실행하여 코드 변경 이력(diff) 텍스트를 추출합니다.</li>
-                                            <li>추출된 diff 텍스트를 Llama 3 모델에게 "다음 diff를 분석하여 'Conventional Commit' 형식의 커밋 메시지 1줄을 작성해 줘"라는 프롬프트와 함께 전송합니다.</li>
-                                            <li>AI가 생성한 결과(예: `feat: 로그인 UI 및 로직 추가`)를 GUI의 커밋 메시지 입력창에 자동으로 채워 넣어, 사용자는 확인 후 즉시 커밋할 수 있습니다.</li>
-                                        </ol>
-                                    </li>
+                    <div class="min-h-[300px]">
+                        <!-- Features -->
+                        <div id="tab-features" class="tab-content active space-y-8">
+                            <div class="relative pl-6 border-l border-cyber-green/30">
+                                <h3 class="text-lg font-bold text-cyber-green font-display">FUNC_01: AI 커밋 메시지 자동 생성</h3>
+                                <p class="text-sm text-gray-400 mt-2 mb-2 font-mono">Status: <span class="text-green-500">OPERATIONAL</span></p>
+                                <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm">
+                                    <li>`git diff --staged` 명령어로 변경 내역 추출.</li>
+                                    <li>Llama 3에게 "diff를 분석하여 'Conventional Commit' 양식의 메시지 작성" 프롬프트 전송.</li>
+                                    <li>GUI 입력창에 결과 자동 입력, 사용자 즉시 확인 가능.</li>
                                 </ul>
                             </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-lime-400">✨ [핵심 기능 2 - 선제적 AI 코드 리뷰 및 PR 자동 생성]</h3>
-                                <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
-                                    <li><strong>기능:</strong> 사용자가 Pull Request(PR)를 생성하기 전, 'AI 리뷰 받기' 버튼을 통해 코드의 잠재적 버그나 개선점을 피드백 받습니다. 이후 'AI PR 생성' 버튼으로 PR의 제목과 본문을 자동으로 완성합니다.</li>
-                                    <li><strong>구현:</strong>
-                                        <ol class="list-decimal list-inside pl-4 mt-1">
-                                            <li><strong>AI 코드 리뷰:</strong> `git diff [base]...[compare]`로 브랜치 간의 변경 사항을 추출합니다. Llama 3에 "시니어 개발자로서 다음 코드 변경 사항을 리뷰해 줘"라고 요청하여 잠재적 버그, 비효율적 로직, 스타일 문제를 찾아내고 개선 방안을 GUI 모달창에 표시합니다.</li>
-                                            <li><strong>AI PR 생성:</strong> 리뷰가 완료된 코드를 기반으로, AI가 전체 변경 사항을 요약하여 PR의 제목과 상세한 설명을 자동으로 작성합니다. 이는 `gh pr create` 명령어와 연동되어 즉시 GitHub에 PR을 제출할 수 있게 돕니다.</li>
-                                        </ol>
-                                    </li>
+                            <div class="relative pl-6 border-l border-cyber-green/30">
+                                <h3 class="text-lg font-bold text-cyber-green font-display">FUNC_02: 선제적 AI 코드 리뷰 및 PR 자동 생성</h3>
+                                <p class="text-sm text-gray-400 mt-2 mb-2 font-mono">Status: <span class="text-green-500">OPERATIONAL</span></p>
+                                <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm">
+                                    <li><strong>AI 코드 리뷰:</strong> `git diff` 분석. 시니어 개발자 페르소나로 버그/스타일 문제 피드백.</li>
+                                    <li><strong>AI PR 생성:</strong> 변경 사항 요약하여 PR 제목/본문 작성. `gh pr create` 연동으로 즉시 제출.</li>
+                                </ul>
+                            </div>
+                            <!-- Added New Feature: Merge Conflict Resolver -->
+                            <div class="relative pl-6 border-l border-cyber-green/30">
+                                <h3 class="text-lg font-bold text-cyber-green font-display">FUNC_03: 지능형 AI 병합 충돌 해결 (Smart Merge Resolver)</h3>
+                                <p class="text-sm text-gray-400 mt-2 mb-2 font-mono">Status: <span class="text-green-500">OPERATIONAL</span></p>
+                                <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm">
+                                    <li><strong>Conflict Analysis:</strong> 충돌 마커(`<<<<`, `====`, `>>>>`)와 주변 코드 문맥을 AI가 심층 파싱.</li>
+                                    <li><strong>Smart Synthesis:</strong> 단순 양자택일(Current/Incoming)을 넘어, 두 로직을 논리적으로 결합한 <strong>'제3의 합의안(Hybrid Merge)'</strong> 자동 생성 및 제안.</li>
+                                    <li><strong>One-Click Resolve:</strong> 사용자가 AI 제안을 선택하면 즉시 코드 수정 적용 및 마커 제거 자동화 (Conflict Resolved).</li>
                                 </ul>
                             </div>
                         </div>
                         
+                        <!-- Role -->
                         <div id="tab-role" class="tab-content">
-                            <h3 class="text-xl font-semibold text-lime-400">👨‍💻 [나의 역할 및 기여]</h3>
-                            <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
-                                <li>프로젝트 아키텍처 설계 (Python, PySide 6, Llama 3 연동 구조)</li>
-                                <li>생성형 AI(Llama 3) 연동 모듈 개발 및 프롬프트 엔지니어링</li>
-                                <li>핵심 기능 (AI 커밋 메시지, AI 코드 리뷰) 백엔드 로직 구현</li>
-                                <li>Git 명령어 제어를 위한 `subprocess` 핸들러 및 `QThread`를 활용한 비동기 처리 구현</li>
-                                <li>PySide 6(Qt 6)를 이용한 메인 GUI 레이아웃 및 핵심 기능 모달창 프로토타이핑</li>
+                            <h3 class="text-lg font-bold text-white font-display mb-4">>> 나의 역할 및 기여</h3>
+                            <ul class="space-y-3 text-gray-300 text-sm font-mono">
+                                <li class="flex items-start"><span class="text-cyber-cyan mr-2">[ARCH]</span> 프로젝트 아키텍처 설계 (Python, PySide 6, Llama 3 연동)</li>
+                                <li class="flex items-start"><span class="text-cyber-cyan mr-2">[DEV]</span> 생성형 AI 연동 모듈 개발 및 프롬프트 엔지니어링</li>
+                                <li class="flex items-start"><span class="text-cyber-cyan mr-2">[BACK]</span> 핵심 기능 (AI 커밋, 리뷰) 백엔드 로직 구현</li>
+                                <li class="flex items-start"><span class="text-cyber-cyan mr-2">[ASYNC]</span> Git 제어 subprocess 핸들러 및 QThread 비동기 처리</li>
+                                <li class="flex items-start"><span class="text-cyber-cyan mr-2">[UI]</span> 메인 GUI 레이아웃 및 핵심 기능 모달창 프로토타이핑</li>
                             </ul>
                         </div>
                         
-                        <!-- New Tab: Detailed Results -->
+                        <!-- Results -->
                         <div id="tab-results" class="tab-content space-y-8">
                             <div>
-                                <h3 class="text-xl font-semibold text-lime-400 mb-4">📉 문서화 시간 단축 효과</h3>
-                                <p class="text-gray-400 mb-4">반복적인 커밋 메시지 작성 및 PR 본문 작성 시간을 획기적으로 줄였습니다.</p>
+                                <h3 class="text-lg font-bold text-cyber-green font-display mb-4">문서화 시간 단축 효과</h3>
                                 
-                                <div class="bg-slate-800 p-6 rounded-lg border border-slate-700">
+                                <div class="bg-gray-900 p-4 border border-gray-800">
                                     <div class="mb-4">
-                                        <div class="flex justify-between text-sm mb-1">
-                                            <span class="text-gray-400">기존 (Manual)</span>
-                                            <span class="text-gray-400">약 5분/건</span>
+                                        <div class="flex justify-between text-xs mb-1 font-mono">
+                                            <span class="text-gray-500">기존 (Manual)</span>
+                                            <span class="text-gray-500">약 5분/건</span>
                                         </div>
-                                        <div class="w-full bg-slate-700 rounded-full h-4">
-                                            <div class="bg-gray-500 h-4 rounded-full" style="width: 100%"></div>
+                                        <div class="w-full bg-gray-800 h-2">
+                                            <div class="bg-gray-600 h-2" style="width: 100%"></div>
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="flex justify-between text-sm mb-1">
-                                            <span class="text-lime-400 font-bold">AI 어시스턴트 도입</span>
-                                            <span class="text-lime-400 font-bold">약 2분/건 (60% 단축)</span>
+                                        <div class="flex justify-between text-xs mb-1 font-mono">
+                                            <span class="text-cyber-green font-bold">AI 어시스턴트 도입</span>
+                                            <span class="text-cyber-green font-bold">약 2분/건 (60% 단축)</span>
                                         </div>
-                                        <div class="w-full bg-slate-700 rounded-full h-4 relative">
-                                            <div class="bg-lime-500 h-4 rounded-full relative" style="width: 40%">
-                                                <span class="absolute -right-2 -top-1 w-3 h-3 bg-white rounded-full animate-pulse"></span>
-                                            </div>
+                                        <div class="w-full bg-gray-800 h-2 relative overflow-hidden">
+                                            <div class="bg-cyber-green h-2 absolute top-0 left-0" style="width: 40%"></div>
+                                            <!-- Shine effect -->
+                                            <div class="absolute top-0 left-0 h-full w-full animate-pulse bg-white opacity-10"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div>
-                                <h3 class="text-xl font-semibold text-lime-400 mb-4">🧩 GitHub 진입 장벽 완화 (난이도 체감)</h3>
-                                <p class="text-gray-400 mb-4">초보 개발자가 느끼는 Git CLI 및 병합 충돌에 대한 심리적/기술적 부담을 줄였습니다.</p>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 flex flex-col items-center">
-                                        <span class="text-gray-400 mb-2">기존 (CLI/Manual)</span>
-                                        <div class="w-full h-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full mb-2 opacity-50"></div>
-                                        <span class="text-red-400 font-bold text-lg">High (어려움)</span>
-                                        <p class="text-xs text-gray-500 mt-2 text-center">명령어 암기, 충돌 해결의 두려움</p>
-                                    </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-gray-900 border border-red-900/30 p-4 text-center">
+                                    <span class="text-gray-500 text-xs block mb-2">기존 (CLI/Manual)</span>
+                                    <div class="text-red-500 font-bold font-display text-xl">High (어려움)</div>
+                                    <p class="text-xs text-gray-600 mt-2">명령어 암기, 충돌 해결의 두려움</p>
+                                </div>
 
-                                    <div class="bg-slate-800 p-6 rounded-lg border border-lime-500/30 flex flex-col items-center shadow-[0_0_15px_rgba(132,204,22,0.1)]">
-                                        <span class="text-lime-400 mb-2 font-bold">AI 어시스턴트 활용</span>
-                                        <div class="w-full h-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full mb-2 relative">
-                                            <div class="absolute left-[20%] -top-1 w-6 h-6 bg-white border-2 border-green-500 rounded-full shadow-lg transform -translate-x-1/2"></div>
-                                        </div>
-                                        <span class="text-green-400 font-bold text-lg">Low (쉬움)</span>
-                                        <p class="text-xs text-gray-400 mt-2 text-center">자연어 명령, AI 가이드 제공</p>
-                                    </div>
+                                <div class="bg-gray-900 border border-cyber-green/30 p-4 text-center relative shadow-[0_0_15px_rgba(0,255,65,0.1)]">
+                                    <span class="text-cyber-green text-xs block mb-2">AI 어시스턴트 활용</span>
+                                    <div class="text-cyber-green font-bold font-display text-xl">Low (쉬움)</div>
+                                    <p class="text-xs text-gray-400 mt-2">자연어 명령, AI 가이드 제공</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- New Tab: Retrospective -->
+                        <!-- Retro -->
                         <div id="tab-retro" class="tab-content space-y-6">
                             <div>
-                                <h3 class="text-xl font-semibold text-lime-400">💡 [회고 (배운 점)]</h3>
-                                <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
-                                    <li><strong>AI 통합 경험:</strong> 생성형 AI(Llama 3)를 단순 챗봇이 아닌 실제 개발 도구(Git Client)에 통합하며, 프롬프트 엔지니어링과 데이터 파싱의 중요성을 체감했습니다.</li>
-                                    <li><strong>데스크톱 앱 최적화:</strong> Python과 PySide 6를 사용해 네이티브 GUI를 구현하고, `QThread` 멀티스레딩으로 무거운 AI 작업을 UI 멈춤 없이 처리하는 비동기 프로그래밍 역량을 길렀습니다.</li>
-                                    <li><strong>Git 심층 이해:</strong> AI에게 Git 상태를 정확히 전달하기 위해 `diff`, `log`, `reflog` 등 Git의 내부 동작 원리를 깊이 있게 학습했습니다.</li>
+                                <h3 class="text-lg font-bold text-cyber-cyan font-display border-b border-gray-800 pb-2 inline-block">SYSTEM_LOG: [회고 - 배운 점]</h3>
+                                <ul class="list-none space-y-2 text-gray-300 mt-3 text-sm font-mono">
+                                    <li><span class="text-cyber-green">>></span> <strong>AI 통합 경험:</strong> LLM을 단순 챗봇이 아닌 실제 개발 도구로 통합. 데이터 파싱 중요성 체감.</li>
+                                    <li><span class="text-cyber-green">>></span> <strong>데스크톱 앱 최적화:</strong> Python+PySide6 네이티브 GUI 및 QThread 비동기 프로그래밍 역량 강화.</li>
+                                    <li><span class="text-cyber-green">>></span> <strong>Git 심층 이해:</strong> diff, log, reflog 등 Git 내부 동작 원리 학습.</li>
                                 </ul>
                             </div>
                             <div>
-                                <h3 class="text-xl font-semibold text-lime-400">🔄 [회고 (개선점)]</h3>
-                                <ul class="list-disc list-inside space-y-2 text-gray-300 mt-3 pl-4">
-                                    <li><strong>시각적 히스토리 도입:</strong> 현재 텍스트 기반인 로그를 넘어, Git 커밋/브랜치 그래프를 시각적으로 표현하고 인터랙티브하게 탐색하는 기능을 추가할 예정입니다.</li>
-                                    <li><strong>RAG 기반 Q&A:</strong> 단순 LLM 질의를 넘어, 프로젝트 전체 코드베이스를 벡터화하여 RAG(검색 증강 생성)를 적용함으로써, "이 프로젝트에서 인증 로직은 어디에 있어?"와 같은 문맥 기반 질문에 답변하도록 고도화하고 싶습니다.</li>
+                                <h3 class="text-lg font-bold text-purple-400 font-display border-b border-gray-800 pb-2 inline-block">NEXT_UPDATE: [회고 - 개선점]</h3>
+                                <ul class="list-none space-y-2 text-gray-300 mt-3 text-sm font-mono">
+                                    <li><span class="text-purple-500">>></span> <strong>시각적 히스토리:</strong> 텍스트 로그를 넘어 인터랙티브한 커밋/브랜치 그래프 도입 예정.</li>
+                                    <li><span class="text-purple-500">>></span> <strong>RAG 기반 Q&A:</strong> 코드베이스를 벡터화하여 "인증 로직 어디 있어?" 같은 문맥 질문 처리 고도화.</li>
                                 </ul>
                             </div>
                         </div>
@@ -317,19 +521,22 @@
                     </div>
                 </section>
 
-                <!-- Demo Video Section (Replaces Gallery) -->
-                <section id="demo" class="page-section bg-slate-900 p-8 rounded-lg shadow-lg border border-slate-700">
-                    <h2 class="text-3xl font-semibold text-fuchsia-400 mb-6">🎥 시연 영상</h2>
-                    <div class="video-container">
-                        <!-- 유튜브 ID가 있다면 아래 src를 교체하세요: https://www.youtube.com/embed/VIDEO_ID -->
-                        <!-- 현재는 플레이스홀더 텍스트를 표시합니다. -->
-                        <div class="placeholder-text">
-                            <div class="text-5xl mb-4">▶️</div>
-                            <p class="text-xl font-semibold">Project Demo Video</p>
-                            <p class="text-sm mt-2">이곳에 실제 구동 영상을 임베드할 수 있습니다.</p>
+                <!-- Demo Video Section -->
+                <section id="demo" class="page-section cyber-panel p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="w-2 h-8 bg-purple-500 block"></span>
+                        <h2 class="text-3xl font-bold font-display text-white tracking-wider">VISUAL: <span class="text-purple-500 text-glow">시연 영상</span></h2>
+                    </div>
+                    
+                    <div class="video-container group">
+                        <!-- Placeholder -->
+                        <div class="placeholder-text group-hover:bg-gray-900/80 transition-colors">
+                            <div class="text-5xl mb-4 text-purple-500 animate-pulse">▶</div>
+                            <p class="text-xl font-bold font-display tracking-widest text-white">INITIALIZE_PLAYBACK</p>
+                            <p class="text-xs font-mono text-gray-500 mt-2">[ Awaiting Source Signal... ]</p>
                         </div>
                     </div>
-                    <p class="text-center text-gray-500 mt-4 text-sm">
+                    <p class="text-center text-gray-500 mt-4 text-xs font-mono">
                         * 실제 애플리케이션의 구동 화면입니다. AI 커밋 생성 및 코드 리뷰 과정을 확인하실 수 있습니다.
                     </p>
                 </section>
